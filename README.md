@@ -1,6 +1,6 @@
 # Business de Sidi
 
-Projet GitHub de gestion agricole pour le suivi des ressources, des achats, des ventes et des alertes de stock.
+Application de gestion agricole pour suivre le stock, les revenus, les bénéfices, les achats, les ventes et les alertes.
 
 ## GitHub
 
@@ -79,7 +79,7 @@ Cela démarre le serveur sur le port 3102, attend qu’il soit prêt, puis ouvre
 Le dépôt inclut `railway.json` pour lancer l'application et vérifier son endpoint `/health`.
 Railway attribue un domaine public au service après sa création : aucun domaine personnel n'est nécessaire.
 
-1. Pousse le projet sur un dépôt GitHub privé et connecte ce dépôt à Railway.
+1. Pousse le projet sur un dépôt GitHub (privé recommandé pour limiter l'exposition du code), puis connecte ce dépôt à Railway.
 2. Dans le service Railway, ajoute un **Volume** monté sur `/data`, puis règle `DATA_DIR=/data`.
 3. Ajoute les variables `NODE_ENV=production`, `JWT_SECRET`, `ADMIN_EMAIL` et `INITIAL_ADMIN_PASSWORD` dans les variables Railway. Utilise des valeurs uniques et secrètes ; le mot de passe initial doit faire au moins 12 caractères.
 4. Garde une seule instance du service : le stockage JSON sur volume est conçu pour un seul processus applicatif.
