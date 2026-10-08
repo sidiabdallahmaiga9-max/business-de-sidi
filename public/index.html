@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Application de suivi d'élevage avec historique, ressources, achats et ventes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>AgriTech Pro - Plateforme de Gestion Agricole</title>
+  <link rel="apple-touch-icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <header class="page-header" role="banner">
+    <div class="page-header__content">
+      <div class="brand-block">
+        <div class="brand-icon-wrapper" id="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+            <circle cx="9" cy="14" r="1"/>
+            <circle cx="15" cy="14" r="1"/>
+          </svg>
+        </div>
+        <div>
+          <span class="eyebrow">AgriTech Pro</span>
+          <h1 id="app-main-title">Plateforme de Gestion Agricole</h1>
+          <p class="lead">Analytics intelligent et suivi en temps réel de votre exploitation</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="header-pill">
+          <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          <span>En ligne</span>
+        </div>
+        <button id="theme-toggle-header" class="icon-button header-theme-toggle" type="button" aria-label="Changer le thème" title="Changer le thème">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="menu-button" aria-label="Ouvrir le menu" class="icon-button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    </section>
+
+    <section class="summary-strip">
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+        </div>
+        <strong id="current-resources">0</strong>
+        <span>Stock total actuel</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <strong id="total-spent">0</strong>
+        <span>Total des achats</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/>
+            <polyline points="17,6 23,6 23,12"/>
+          </svg>
+        </div>
+        <strong id="total-profit">0</strong>
+        <span>Bénéfices nets</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10,9 9,9 8,9"/>
+          </svg>
+        </div>
+        <strong id="operation-count-summary">0</strong>
+        <span>Opérations enregistrées</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <strong id="revenue-this-month">0</strong>
+        <span>CA ce mois</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <strong id="margin-percentage">0%</strong>
+        <span>Marge bénéficiaire</span>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon-wrapper">
+          <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 4v16m-6-6h12"/>
+          </svg>
+        </div>
+        <strong id="account-balance">0</strong>
+        <span>Solde du compte</span>
+      </article>
+    </section>
+
+    <section id="stock-alerts" class="alert-panel hidden"></section>
+
+    <div class="layout-grid">
+      <section class="panel panel--form">
+        <div class="panel-header">
+          <div>
+            <h2>Ajouter une opération</h2>
+            <p>Enregistre un achat, une vente ou ajuste le stock en quelques clics.</p>
+          </div>
+          <span class="panel-badge">Rapide</span>
+        </div>
+
+        <form id="transaction-form" aria-label="Formulaire d'ajout d'opération">
+          <div class="toggle-row">
+            <label class="checkbox-label">
+              <input id="setStockMode" type="checkbox" aria-describedby="stock-mode-help" />
+              Définir le stock actuel
+            </label>
+            <span id="stock-mode-help" class="sr-only">Cochez cette case pour définir le stock actuel au lieu d'ajouter une opération</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="type">Type</label>
+              <select id="type" required aria-required="true">
+                <option value="achat">Achat</option>
+                <option value="vente">Vente</option>
+                <option value="stock">Stock</option>
+                <option value="perte">Perte</option>
+                <option value="custom">Autre (personnalisé)</option>
+              </select>
+            </div>
+            <div class="field-group hidden" id="custom-type-group">
+              <label for="custom-type">Type personnalisé</label>
+              <input id="custom-type" type="text" placeholder="Ex : dette, somme reçue" />
+            </div>
+            <div class="field-group hidden" id="transaction-direction-group">
+              <label for="direction">Sens</label>
+              <select id="direction">
+                <option value="positive">Entrée</option>
+                <option value="negative">Sortie</option>
+                <option value="neutral">Neutre</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="date">Date et heure</label>
+              <input id="date" type="datetime-local" aria-label="Date et heure de l'opération" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="resource">Ressource</label>
+            <input id="resource" type="text" placeholder="Ex : fourrage, poules" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="quantity">Quantité</label>
+              <input id="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" required />
+            </div>
+            <div class="field-group">
+              <label for="unitPrice">Prix unitaire</label>
+              <input id="unitPrice" type="number" min="0.01" step="0.01" inputmode="decimal" required />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="alert-threshold">Seuil d’alerte</label>
+            <input id="alert-threshold" type="number" min="0" step="1" value="5" />
+          </div>
+
+          <div class="field-group">
+            <label for="note">Note</label>
+            <input id="note" type="text" placeholder="Commentaire (optionnel)" />
+          </div>
+
+          <div class="field-group hidden-loss-cause" id="loss-cause-group">
+            <label for="loss-cause">Cause de la perte</label>
+            <select id="loss-cause">
+              <option value="">Sélectionnez la cause</option>
+              <option value="peremption">Péremption/date limite dépassée</option>
+              <option value="degradation">Dégradation/abîmé</option>
+              <option value="vol">Vol</option>
+              <option value="erreur">Erreur de manipulation</option>
+              <option value="accident">Accident</option>
+              <option value="maladie">Maladie des animaux</option>
+              <option value="mort">Mort des animaux</option>
+              <option value="intemperie">Intempéries</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="primary-button">Enregistrer</button>
+            <button type="button" id="clear-button" class="secondary-button">Effacer</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel panel--history">
+        <div class="panel-header panel-header--spread">
+          <div>
+            <h2>Historique</h2>
+            <p>Filtrer, trier et exporter votre historique d’opérations.</p>
+          </div>
+          <div class="button-group">
+            <label class="secondary-button upload-button">
+              Importer CSV
+              <input id="import-csv-input" type="file" accept=".csv,text/csv" hidden />
+            </label>
+            <button id="export-csv-button" class="secondary-button">CSV</button>
+            <button id="export-excel-button" class="secondary-button">Excel</button>
+            <button id="export-pdf-button" class="secondary-button">PDF</button>
+            <button id="share-report-button" class="secondary-button">Partager</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="field-group">
+            <label for="search-input">Recherche</label>
+            <input id="search-input" type="search" placeholder="Rechercher une ressource ou note" />
+          </div>
+          <div class="field-group">
+            <label for="history-type-filter">Type</label>
+            <select id="history-type-filter">
+              <option value="">Tous</option>
+              <option value="achat">Achat</option>
+              <option value="vente">Vente</option>
+              <option value="stock">Stock</option>
+              <option value="perte">Perte</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="sort-field">Trier par</label>
+            <select id="sort-field">
+              <option value="date">Date</option>
+              <option value="total">Montant</option>
+              <option value="quantity">Quantité</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="sort-order">Ordre</label>
+            <select id="sort-order">
+              <option value="desc">Décroissant</option>
+              <option value="asc">Croissant</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="date-from">Date début</label>
+            <input id="date-from" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="date-to">Date fin</label>
+            <input id="date-to" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="min-amount">Montant min</label>
+            <input id="min-amount" type="number" min="0" step="0.01" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label for="max-amount">Montant max</label>
+            <input id="max-amount" type="number" min="0" step="0.01" placeholder="∞" />
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Ressource</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+                <th>Total</th>
+                <th>Solde</th>
+                <th>Cause perte</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+
+        <div class="resource-breakdown">
+          <div class="section-title">
+            <h3>Stock par ressource</h3>
+          </div>
+          <div class="table-wrapper">
+            <table class="breakdown-table">
+              <thead>
+                <tr>
+                  <th>Ressource</th>
+                  <th>Stock actuel</th>
+                </tr>
+              </thead>
+              <tbody id="resource-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stats-panel">
+            <h3>Statistiques rapides</h3>
+            <div class="stats-list">
+              <div><span>Opérations totales</span><strong id="operation-count">0</strong></div>
+              <div><span>Ressources différentes</span><strong id="resource-types">0</strong></div>
+              <div><span>Mois affichés</span><strong id="month-count">6</strong></div>
+            </div>
+          </div>
+          <div class="chart-panel">
+            <h3>Evolution mensuelle</h3>
+            <div class="chart-bars" id="monthly-chart"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Chat Fullscreen Modal -->
+  <div id="chat-fullscreen-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog chat-fullscreen-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content chat-fullscreen-content">
+        <div class="modal-header chat-fullscreen-header">
+          <div class="chat-title-block">
+            <span class="chat-brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="4" y="7" width="16" height="13" rx="4" />
+                <path d="M12 3v4M8.5 12h.01M15.5 12h.01M9 16h6" />
+              </svg>
+            </span>
+            <div class="chat-title-copy">
+              <h3>Assistant commercial</h3>
+              <span class="chat-title-subtitle">Votre exploitation, en un coup d’œil</span>
+            </div>
+          </div>
+          <div class="chat-fullscreen-actions">
+            <button type="button" class="icon-button theme-toggle" id="theme-toggle" aria-label="Passer en mode sombre" title="Changer le thème">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+            <button type="button" class="icon-button" id="chat-history-btn" title="Historique">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+                <line x1="12" y1="2" x2="12" y2="4"/>
+              </svg>
+            </button>
+            <button type="button" class="icon-button" id="chat-export-btn" title="Exporter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button type="button" class="modal-close chat-fullscreen-close" aria-label="Fermer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="modal-body chat-fullscreen-body">
+          <!-- Enhanced Sidebar -->
+          <div class="chat-sidebar hidden-sidebar" id="chat-sidebar">
+            <div class="chat-sidebar-header enhanced">
+              <div class="sidebar-header-content">
+                <div class="sidebar-icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                    <line x1="12" y1="2" x2="12" y2="4"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4>Historique</h4>
+                  <span class="sidebar-subtitle">Conversations récentes</span>
+                </div>
+              </div>
+              <button class="sidebar-close-btn" id="chat-sidebar-close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="chat-sidebar-search enhanced">
+              <div class="search-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </div>
+              <input type="text" placeholder="Rechercher dans l'historique..." id="chat-history-search" />
+              <button class="search-clear hidden-search-clear" id="search-clear-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="chat-sidebar-content" id="chat-history-list">
+              <!-- History items will be populated here -->
+            </div>
+            <div class="chat-sidebar-footer">
+              <button class="clear-history-btn" id="clear-history-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Effacer l'historique</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Enhanced Main Chat Area -->
+          <div class="chat-main enhanced">
+            <div class="chat-messages" id="chat-messages-fullscreen">
+              <div class="chat-welcome" id="chat-welcome">
+                <span class="chat-welcome-icon" aria-hidden="true">🌱</span>
+                <p class="chat-welcome-eyebrow">AGRI ASSISTANT</p>
+                <h4>Bonjour, que souhaitez-vous analyser&nbsp;?</h4>
+                <p>Je transforme vos opérations enregistrées en réponses simples sur vos ventes, vos dépenses et vos stocks.</p>
+                <div class="chat-welcome-tags" aria-label="Sujets disponibles">
+                  <span>Ventes</span><span>Stocks</span><span>Rentabilité</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Enhanced Input Container -->
+            <div class="chat-input-container enhanced">
+              <div class="chat-suggestions-title" id="chat-suggestions-title">Questions rapides</div>
+              <div class="input-suggestions suggestions-visible" id="input-suggestions">
+                <button type="button" class="suggestion-item" data-suggestion="Quel est mon chiffre d'affaires ce mois ?">
+                  <span class="suggestion-icon">💰</span>
+                  <span class="suggestion-text">CA ce mois</span>
+                </button>
+                <button type="button" class="suggestion-item" data-suggestion="Quels sont mes produits les plus vendus ?">
+                  <span class="suggestion-icon">📊</span>
+                  <span class="suggestion-text">Top ventes</span>
+                </button>
+                <button type="button" class="suggestion-item" data-suggestion="/predict">
+                  <span class="suggestion-icon">⚠️</span>
+                  <span class="suggestion-text">Prévoir les ruptures</span>
+                </button>
+                <button type="button" class="suggestion-item" data-suggestion="/restock">
+                  <span class="suggestion-icon">📦</span>
+                  <span class="suggestion-text">Réapprovisionnement</span>
+                </button>
+                <button type="button" class="suggestion-item" data-suggestion="/anomalies">
+                  <span class="suggestion-icon">📈</span>
+                  <span class="suggestion-text">Ventes inhabituelles</span>
+                </button>
+                <button type="button" class="suggestion-item" data-suggestion="Prépare une vente de maïs quantité 12 prix 450">
+                  <span class="suggestion-icon">📝</span>
+                  <span class="suggestion-text">Préparer une vente</span>
+                </button>
+              </div>
+              
+              <form id="assistant-form-fullscreen" class="assistant-form enhanced">
+                <div class="input-wrapper enhanced">
+                  <div class="input-field-wrapper">
+                    <input id="assistant-input-fullscreen" type="text" maxlength="500" placeholder="Posez une question à l'assistant..." autocomplete="off" />
+                    <div class="input-char-counter" id="char-counter">0/500</div>
+                  </div>
+                  
+                  <button type="submit" class="send-button enhanced">
+                    <div class="send-btn-content">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-overlay" aria-hidden="true">
+    <div id="app-menu" aria-hidden="true" class="menu-drawer">
+      <div class="menu-panel">
+        <div class="menu-search-wrap">
+          <label class="sr-only" for="menu-search-input">Rechercher dans le menu</label>
+          <input id="menu-search-input" type="search" placeholder="Rechercher une action ou un réglage…" autocomplete="off" />
+        </div>
+        <p id="menu-search-empty" class="menu-search-empty" hidden>Aucun résultat dans le menu.</p>
+        <!-- Profile Section -->
+        <div class="menu-section menu-profile-section">
+          <button type="button" id="profile-summary" class="profile-summary enhanced profile-summary-button" aria-label="Modifier le profil">
+            <div class="profile-avatar-container">
+              <div class="profile-avatar" id="profile-avatar">
+                <span class="avatar-text">U</span>
+                <div class="avatar-ring"></div>
+              </div>
+              <div class="avatar-status online" id="avatar-status"></div>
+            </div>
+            <div class="profile-meta">
+              <div class="profile-name-row">
+                <strong id="profile-name">Invité</strong>
+                <span class="profile-badge guest" id="profile-badge">Invité</span>
+                <span class="admin-mode-indicator hidden-admin-indicator" id="admin-mode-indicator">
+                  <span class="admin-icon">🛡️</span>
+                  <span class="admin-text">ADMIN</span>
+                </span>
+              </div>
+              <span id="profile-email">Connectez-vous pour accéder à votre profil</span>
+              <div class="profile-stats">
+                <span class="profile-stat">
+                  <span class="stat-icon">📊</span>
+                  <span class="stat-value" id="profile-ops">0</span>
+                </span>
+                <span class="profile-stat">
+                  <span class="stat-icon">💰</span>
+                  <span class="stat-value" id="profile-ca">0 FCFA</span>
+                </span>
+              </div>
+            </div>
+          </button>
+
+          <div id="profile-logged-in-actions" class="profile-actions hidden-profile-actions">
+            <button type="button" id="menu-logout-button" class="menu-button modern-menu-item profile-action-button">
+              <span class="menu-icon">🚪</span>
+              <span class="menu-text">Se déconnecter</span>
+              <span class="menu-action-icon">→</span>
+            </button>
+          </div>
+
+          <div id="profile-auth-box" class="profile-auth-box enhanced">
+            <div class="auth-toggle-row">
+              <button type="button" class="auth-toggle active" data-auth-tab="login">
+                <span class="toggle-icon">🔐</span>
+                <span>Connexion</span>
+              </button>
+              <button type="button" class="auth-toggle" data-auth-tab="register">
+                <span class="toggle-icon">✨</span>
+                <span>Inscription</span>
+              </button>
+            </div>
+
+            <form id="menu-login-form" class="menu-auth-form active">
+              <div class="form-group compact-form-group">
+                <label for="menu-login-email">
+                  <span class="label-icon">📧</span>
+                  Email
+                </label>
+                <input id="menu-login-email" type="email" placeholder="votre@email.com" required />
+              </div>
+              <div class="form-group compact-form-group">
+                <label for="menu-login-password">
+                  <span class="label-icon">🔑</span>
+                  Mot de passe
+                </label>
+                <input id="menu-login-password" type="password" placeholder="••••••••" required />
+              </div>
+              <button type="submit" class="primary-button full-width-button">
+                <span class="btn-icon">🚀</span>
+                Se connecter
+              </button>
+            </form>
+
+            <form id="menu-register-form" class="menu-auth-form">
+              <div class="form-group compact-form-group">
+                <label for="menu-register-name">
+                  <span class="label-icon">👤</span>
+                  Nom
+                </label>
+                <input id="menu-register-name" type="text" placeholder="Votre nom" required />
+              </div>
+              <div class="form-group compact-form-group">
+                <label for="menu-register-email">
+                  <span class="label-icon">📧</span>
+                  Email
+                </label>
+                <input id="menu-register-email" type="email" placeholder="votre@email.com" required />
+              </div>
+              <div class="form-group compact-form-group">
+                <label for="menu-register-farm">
+                  <span class="label-icon">🏡</span>
+                  Ferme
+                </label>
+                <input id="menu-register-farm" type="text" placeholder="Nom de votre ferme" required />
+              </div>
+              <div class="form-group compact-form-group">
+                <label for="menu-register-password">
+                  <span class="label-icon">🔑</span>
+                  Mot de passe
+                </label>
+                <input id="menu-register-password" type="password" placeholder="Minimum 6 caractères" required />
+              </div>
+              <button type="submit" class="primary-button full-width-button">
+                <span class="btn-icon">✨</span>
+                Créer le compte
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Actions Rapides -->
+        <div class="menu-section enhanced-section">
+          <div class="section-header">
+            <span class="section-icon">⚡</span>
+            <h4>Assistant et exports</h4>
+          </div>
+          <div class="action-buttons-grid">
+            <button class="menu-button modern-menu-item featured" id="menu-assistant-btn">
+              <div class="button-icon-wrapper assistant-gradient">
+                <span class="menu-icon">🤖</span>
+              </div>
+              <div class="button-content">
+                <span class="menu-text">Assistant Commercial</span>
+                <span class="menu-subtitle">IA intelligente</span>
+              </div>
+              <span class="menu-badge action-badge pulse">Nouveau</span>
+            </button>
+            <button class="menu-button modern-menu-item" id="menu-export-csv">
+              <div class="button-icon-wrapper csv-gradient">
+                <span class="menu-icon">⬇️</span>
+              </div>
+              <div class="button-content">
+                <span class="menu-text">Exporter CSV</span>
+                <span class="menu-subtitle">Données brutes</span>
+              </div>
+            </button>
+            <button class="menu-button modern-menu-item" id="menu-export-excel">
+              <div class="button-icon-wrapper excel-gradient">
+                <span class="menu-icon">📘</span>
+              </div>
+              <div class="button-content">
+                <span class="menu-text">Exporter Excel</span>
+                <span class="menu-subtitle">Tableau complet</span>
+              </div>
+            </button>
+            <button class="menu-button modern-menu-item" id="menu-export-pdf">
+              <div class="button-icon-wrapper pdf-gradient">
+                <span class="menu-icon">📄</span>
+              </div>
+              <div class="button-content">
+                <span class="menu-text">Exporter PDF</span>
+                <span class="menu-subtitle">Rapport formaté</span>
+              </div>
+            </button>
+          </div>
+          <div class="menu-question-shortcuts" aria-label="Questions rapides pour l’assistant">
+            <button type="button" class="menu-question-shortcut" data-assistant-question="/predict">Prévoir les ruptures</button>
+            <button type="button" class="menu-question-shortcut" data-assistant-question="/restock">Que réapprovisionner ?</button>
+            <button type="button" class="menu-question-shortcut" data-assistant-question="/anomalies">Ventes inhabituelles</button>
+          </div>
+          <div class="mobile-qr-card assistant-qr-card">
+            <div class="assistant-qr-copy">
+              <span class="assistant-qr-eyebrow">ACCÈS MOBILE</span>
+              <h5>Ouvrir le bot sur un autre appareil</h5>
+              <p>Scannez ce code avec l’appareil photo Android ou iPhone. Connectez-vous ensuite avec votre compte.</p>
+              <p class="assistant-qr-network-note">Le QR fonctionne en local ou à distance. Pour un accès hors Wi‑Fi, configurez une URL publique via la variable d’environnement PUBLIC_APP_URL.</p>
+            </div>
+            <div class="assistant-qr-code-wrap">
+              <a id="mobile-qr-link" class="assistant-qr-open-link" href="#" aria-label="Ouvrir l’assistant sur cet appareil">
+                <img id="mobile-qr-image" class="mobile-qr-image" src="" alt="QR code pour ouvrir l’assistant sur un appareil mobile" loading="lazy" />
+              </a>
+              <span class="assistant-qr-caption">Scannez pour ouvrir l’assistant</span>
+            </div>
+            <button type="button" id="copy-mobile-link" class="secondary-button assistant-qr-copy-button">Copier le lien du bot</button>
+            <p id="mobile-qr-status" class="assistant-qr-status" role="status" aria-live="polite">Préparation du QR code…</p>
+          </div>
+        </div>
+
+        <!-- Statistiques & Alertes -->
+        <div class="menu-section enhanced-section">
+          <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h4>Vue de l’exploitation</h4>
+          </div>
+          <div class="stats-cards-grid">
+            <div class="stat-card revenue-card">
+              <div class="stat-card-icon">
+                <span>💰</span>
+              </div>
+              <div class="stat-card-content">
+                <span class="stat-label">CA ce mois</span>
+                <strong class="stat-value" id="quick-ca">0 FCFA</strong>
+                <span class="stat-trend positive" id="ca-trend">+0%</span>
+              </div>
+            </div>
+            <div class="stat-card operations-card">
+              <div class="stat-card-icon">
+                <span>📊</span>
+              </div>
+              <div class="stat-card-content">
+                <span class="stat-label">Opérations</span>
+                <strong class="stat-value" id="quick-ops">0</strong>
+                <span class="stat-trend" id="ops-trend">Total</span>
+              </div>
+            </div>
+            <div class="stat-card stock-card">
+              <div class="stat-card-icon">
+                <span>📦</span>
+              </div>
+              <div class="stat-card-content">
+                <span class="stat-label">Stock total</span>
+                <strong class="stat-value" id="quick-stock">0</strong>
+                <span class="stat-trend" id="stock-trend">Unités</span>
+              </div>
+            </div>
+            <div class="stat-card margin-card">
+              <div class="stat-card-icon">
+                <span>📈</span>
+              </div>
+              <div class="stat-card-content">
+                <span class="stat-label">Marge</span>
+                <strong class="stat-value" id="quick-margin">0%</strong>
+                <span class="stat-trend" id="margin-trend">Résultat net</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="alert-banner" id="alert-banner">
+            <span class="alert-banner-content">
+              <span class="alert-banner-icon">⚠️</span>
+              <span class="alert-banner-text">
+                <span class="alert-banner-title">Alertes actives</span>
+                <span class="alert-banner-count" id="alert-count">0</span>
+              </span>
+              <span class="alert-banner-arrow">→</span>
+            </span>
+            <span class="alert-banner-detail" id="menu-alert-detail">Aucune ressource sous le seuil</span>
+          </button>
+        </div>
+
+        <!-- Paramètres -->
+        <div class="menu-section accordion-section enhanced-accordion">
+          <button class="accordion-header" data-accordion="settings">
+            <div class="accordion-header-left">
+              <span class="accordion-icon-wrapper settings-gradient">
+                <span>⚙️</span>
+              </span>
+              <span>Paramètres</span>
+            </div>
+            <span class="accordion-chevron">▼</span>
+          </button>
+          <div class="accordion-content" id="accordion-settings">
+            <button class="menu-button modern-menu-item accordion-item" id="change-password-btn">
+              <span class="menu-icon">🔑</span>
+              <span class="menu-text">Changer le mot de passe</span>
+              <span class="menu-item-arrow">→</span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item" id="preferences-btn">
+              <span class="menu-icon">🎨</span>
+              <span class="menu-text">Préférences</span>
+              <span class="menu-item-arrow">→</span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item theme-toggle-item" id="theme-toggle-btn">
+              <span class="menu-icon">🌙</span>
+              <span class="menu-text">Mode sombre/clair</span>
+              <span class="menu-badge theme-badge" id="theme-badge">Clair</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Administration -->
+        <div class="menu-section accordion-section enhanced-accordion">
+          <button class="accordion-header" data-accordion="admin">
+            <div class="accordion-header-left">
+              <span class="accordion-icon-wrapper admin-gradient">
+                <span>🛡️</span>
+              </span>
+              <span>Administration</span>
+            </div>
+            <span class="accordion-chevron">▼</span>
+          </button>
+          <div class="accordion-content" id="accordion-admin">
+            <button class="menu-button modern-menu-item accordion-item admin-item" id="menu-admin-toggle" data-admin-action="admin-toggle">
+              <span class="menu-icon">🛡️</span>
+              <span class="menu-text">Mode admin</span>
+              <span class="menu-badge admin-badge"><i class="fas fa-lock"></i></span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item admin-item" id="menu-admin-repair" data-admin-action="repair">
+              <span class="menu-icon">🛠️</span>
+              <span class="menu-text">Correction d’erreur</span>
+              <span class="menu-badge admin-badge"><i class="fas fa-lock"></i></span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item admin-item" id="menu-admin-users" data-admin-action="users">
+              <span class="menu-icon">👥</span>
+              <span class="menu-text">Gestion des comptes</span>
+              <span class="menu-badge admin-badge"><i class="fas fa-lock"></i></span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item admin-item" data-admin-action="admin-secret">
+              <span class="menu-icon">🔐</span>
+              <span class="menu-text">Modifier le code secret</span>
+              <span class="menu-badge admin-badge"><i class="fas fa-lock"></i></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Autres -->
+        <div class="menu-section accordion-section enhanced-accordion">
+          <button class="accordion-header" data-accordion="other">
+            <div class="accordion-header-left">
+              <span class="accordion-icon-wrapper other-gradient">
+                <span>📋</span>
+              </span>
+              <span>Rapports et outils</span>
+            </div>
+            <span class="accordion-chevron">▼</span>
+          </button>
+          <div class="accordion-content" id="accordion-other">
+            <button class="menu-button modern-menu-item accordion-item" data-report="monthly">
+              <span class="menu-icon">📅</span>
+              <span class="menu-text">Rapport mensuel</span>
+              <span class="menu-item-arrow">→</span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item" data-report="weekly">
+              <span class="menu-icon">📆</span>
+              <span class="menu-text">Rapport hebdomadaire</span>
+              <span class="menu-item-arrow">→</span>
+            </button>
+            <button class="menu-button modern-menu-item accordion-item" id="install-app-menu-btn">
+              <span class="menu-icon">🧩</span>
+              <span class="menu-text">Installer la PWA</span>
+              <span class="menu-item-arrow">→</span>
+            </button>
+            <form id="feedback-form" class="feedback-form enhanced">
+              <textarea id="feedback-message" placeholder="Partagez votre feedback..." rows="2"></textarea>
+              <button type="submit" class="primary-button full-width-button">
+                <span class="btn-icon">💬</span>
+                Envoyer
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="menu-section menu-footer enhanced-footer">
+          <div class="footer-links">
+            <button class="menu-link" data-action="help">
+              <span class="menu-icon">❓</span>
+              <span>Aide</span>
+            </button>
+            <button class="menu-link" data-action="about">
+              <span class="menu-icon">ℹ️</span>
+              <span>À propos</span>
+            </button>
+          </div>
+          <div class="footer-info">
+            <span class="footer-version">v1.0.0</span>
+            <span class="footer-copyright">© 2026 Business de Sidi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="fab-add" class="fab-button" type="button" aria-label="Ajouter une opération">+</button>
+  <button id="install-app-btn" class="install-banner" type="button">Installer l’app</button>
+
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+  <!-- Profile Edit Modal -->
+  <div id="profile-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog profile-modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Gestion du profil
+          </h3>
+          <button class="modal-close profile-modal-close" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Profile Tabs -->
+          <div class="profile-tabs">
+            <button class="profile-tab active" data-tab="account">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Compte
+            </button>
+            <button class="profile-tab" data-tab="customization">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              Personnalisation
+            </button>
+          </div>
+
+          <!-- Account Tab -->
+          <div class="profile-tab-content active" id="tab-account">
+            <div class="account-section">
+              <div class="account-info">
+                <div class="current-account-card">
+                  <div class="account-avatar" id="current-account-avatar">A</div>
+                  <div class="account-details">
+                    <strong id="current-account-name">Admin</strong>
+                    <span id="current-account-email">Compte local</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="account-actions">
+                <button class="account-action-btn primary" id="switch-account-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                    <line x1="12" y1="2" x2="12" y2="12"></line>
+                  </svg>
+                  Changer de compte
+                </button>
+                <button class="account-action-btn secondary" id="logout-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  Déconnexion
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customization Tab -->
+          <div class="profile-tab-content" id="tab-customization">
+            <div class="customization-section">
+              <!-- Profile Photo -->
+              <div class="custom-group">
+                <label>Photo de profil</label>
+                <div class="profile-photo-section">
+                  <div class="profile-photo-preview" id="profile-photo-preview">
+                    <span id="profile-photo-letter">A</span>
+                  </div>
+                  <div class="profile-photo-actions">
+                    <input type="file" id="profile-photo-input" accept="image/*" hidden>
+                    <button class="photo-action-btn" id="upload-photo-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      Télécharger
+                    </button>
+                    <button class="photo-action-btn" id="remove-photo-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- App Name -->
+              <div class="custom-group">
+                <label>Nom de l'application</label>
+                <input type="text" id="app-title-input" class="custom-text-input" maxlength="60" placeholder="Plateforme de Gestion Agricole">
+              </div>
+
+              <!-- Brand Logo -->
+              <div class="custom-group">
+                <label>Logo de l'en-tête</label>
+                <div class="logo-picker-section">
+                  <div class="logo-presets">
+                    <button type="button" class="logo-preset active" data-brand-logo="default" aria-label="Logo par défaut">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
+                        <circle cx="9" cy="14" r="1"></circle>
+                        <circle cx="15" cy="14" r="1"></circle>
+                      </svg>
+                    </button>
+                    <button type="button" class="logo-preset" data-brand-logo="leaf" aria-label="Logo feuille">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 3c-5 1-9 5-10 10-1 5 1 8 5 8 4 0 9-3 10-10 1-5-2-8-5-8Z"></path>
+                        <path d="M5 19c1-3 3-6 7-8"></path>
+                      </svg>
+                    </button>
+                    <button type="button" class="logo-preset" data-brand-logo="field" aria-label="Logo champ">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 19.5h18"></path>
+                        <path d="M6 15c1.5-3 3.5-5 6-7 2.5 2 4.5 4 6 7"></path>
+                        <path d="M6 19.5V8"></path>
+                        <path d="M18 19.5V8"></path>
+                      </svg>
+                    </button>
+                    <button type="button" class="logo-preset" data-brand-logo="sun" aria-label="Logo soleil">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2"></path>
+                        <path d="M12 20v2"></path>
+                        <path d="M4.93 4.93l1.41 1.41"></path>
+                        <path d="M17.66 17.66l1.41 1.41"></path>
+                        <path d="M2 12h2"></path>
+                        <path d="M20 12h2"></path>
+                        <path d="M4.93 19.07l1.41-1.41"></path>
+                        <path d="M17.66 6.34l1.41-1.41"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="logo-upload-actions">
+                    <input type="file" id="brand-logo-input" accept="image/*,.svg" hidden>
+                    <button type="button" class="photo-action-btn" id="upload-brand-logo-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      Télécharger un logo
+                    </button>
+                    <button type="button" class="photo-action-btn" id="remove-brand-logo-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Theme Colors -->
+              <div class="custom-group">
+                <label>Couleur du thème</label>
+                <div class="color-picker-section">
+                  <div class="color-presets">
+                    <button class="color-preset preset-default" data-color="default"></button>
+                    <button class="color-preset preset-blue" data-color="blue"></button>
+                    <button class="color-preset preset-green" data-color="green"></button>
+                    <button class="color-preset preset-orange" data-color="orange"></button>
+                    <button class="color-preset preset-pink" data-color="pink"></button>
+                    <button class="color-preset custom-color-btn" data-color="custom">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                      </svg>
+                    </button>
+                  </div>
+                  <input type="color" id="custom-color-input" class="custom-color-input" value="#6366f1">
+                </div>
+              </div>
+
+              <!-- Bot Interface -->
+              <div class="custom-group">
+                <label>Interface du bot</label>
+                <div class="bot-interface-section">
+                  <div class="bot-option">
+                    <input type="checkbox" id="bot-avatar-style" class="bot-checkbox">
+                    <label for="bot-avatar-style">Avatar circulaire</label>
+                  </div>
+                  <div class="bot-option">
+                    <input type="checkbox" id="bot-dark-mode" class="bot-checkbox">
+                    <label for="bot-dark-mode">Mode sombre</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="secondary-button profile-modal-cancel">Annuler</button>
+                <button type="button" class="primary-button" id="save-customization-btn">Enregistrer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Change Modal -->
+  <div id="password-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Changer le mot de passe
+          </h3>
+          <button class="modal-close password-modal-close" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="password-info">
+            <div class="password-security-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Le mot de passe doit contenir au moins 6 caractères</span>
+            </div>
+          </div>
+          <form id="password-change-form">
+            <div class="form-group">
+              <label for="current-password">Mot de passe actuel</label>
+              <input id="current-password" type="password" required placeholder="Entrez votre mot de passe actuel" />
+            </div>
+            <div class="form-group">
+              <label for="new-password">Nouveau mot de passe</label>
+              <input id="new-password" type="password" required minlength="6" placeholder="Minimum 6 caractères" />
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirmer le mot de passe</label>
+              <input id="confirm-password" type="password" required minlength="6" placeholder="Répétez le nouveau mot de passe" />
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="secondary-button password-modal-cancel">Annuler</button>
+              <button type="submit" class="primary-button">Changer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preferences Modal -->
+  <div id="preferences-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog preferences-modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Préférences
+          </h3>
+          <button class="modal-close preferences-modal-close" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="preferences-form">
+            <div class="form-group">
+              <label for="pref-currency">Devise</label>
+              <select id="pref-currency">
+                <option value="FCFA">FCFA</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="XOF">XOF</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pref-language">Langue</label>
+              <select id="pref-language">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pref-alert-threshold">Seuil d'alerte stock</label>
+              <input id="pref-alert-threshold" type="number" min="1" value="5" />
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="pref-notifications" checked />
+                Activer les notifications
+              </label>
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="pref-auto-save" checked />
+                Sauvegarde automatique
+              </label>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="secondary-button preferences-modal-cancel">Annuler</button>
+              <button type="submit" class="primary-button">Enregistrer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog help-modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content help-modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-robot"></i> Guide de l’assistant commercial</h3>
+          <button class="modal-close help-modal-close" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="help-content" class="help-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Confirmation Modal -->
+  <div id="admin-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-shield-alt"></i> Confirmation Admin</h3>
+          <button class="modal-close" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">Cette action est protégée. Entrez le code administrateur pour continuer.</p>
+          <div class="admin-code-input">
+            <label for="admin-code">Code administrateur</label>
+            <input type="password" id="admin-code" placeholder="Entrez le code secret..." maxlength="20" />
+            <p class="code-hint">Le code est stocké localement et peut être modifié dans les paramètres.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="secondary-button modal-cancel">Annuler</button>
+            <button class="primary-button modal-confirm danger">Confirmer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app-enhanced.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+APK de Business de Sidi
+
+Ce fichier peut être remplacé par votre véritable APK compilé.
+Pour une vraie distribution Android, générez un APK signé puis placez-le dans ce dossier sous le nom business-de-sidi.apk.

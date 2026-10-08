@@ -1,0 +1,21 @@
+{
+  "name": "Business de Sidi",
+  "short_name": "Sidi",
+  "description": "Application de suivi d'élevage avec historique, ressources, achats et ventes",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "windowed-tab", "minimal-ui"],
+  "background_color": "#0f766e",
+  "theme_color": "#0f766e",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"]
+}

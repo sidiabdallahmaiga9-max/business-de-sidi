@@ -1,0 +1,32 @@
+{
+  "name": "business-de-sidi",
+  "version": "1.0.0",
+  "description": "Application de suivi d'élevage avec historique, ressources, achats et ventes.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "generate-icons": "node generate-icons.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "@sentry/node": "^7.86.0",
+    "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.0",
+    "dotenv": "^16.3.0",
+    "exceljs": "^4.4.0",
+    "express": "^4.18.4",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
+    "web-push": "^3.6.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "sharp": "^0.33.0",
+    "supertest": "^6.3.3"
+  }
+}
